@@ -26,5 +26,6 @@ public class BooksController {
         // e della libreria Jackson trasforma il risultato Java in un
         // documento JSON e una response http
         return ResponseEntity.of(value);
+
     }
 }
