@@ -1,10 +1,12 @@
 package com.example.library.app.author;
 
 
+import com.example.library.model.author.AuthorCreateDto;
 import com.example.library.model.author.AuthorResource;
 import com.example.library.model.author.AuthorService;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,18 +19,25 @@ public class AuthorServiceImpl implements AuthorService {
 
   private final AuthorMapper authorMapper;
 
-  @PostConstruct
-  private void caricaAutori() {
-    Author king = Author.builder().lastName("King").firstName("Stephen").build();
-    Author rowling = Author.builder().lastName("Rowling").firstName("J. K.").build();
-    king = this.authorRepository.save(king);
-    rowling = this.authorRepository.save(rowling);
-  }
+//  @PostConstruct
+//  private void caricaAutori() {
+//    Author king = Author.builder().lastName("King").firstName("Stephen").build();
+//    Author rowling = Author.builder().lastName("Rowling").firstName("J. K.").build();
+//    king = this.authorRepository.save(king);
+//    rowling = this.authorRepository.save(rowling);
+//  }
 
   @Override
   public Optional<AuthorResource> readAuthorById(Long authorId) {
     Optional<Author> maybeAuthor = this.authorRepository.findById(authorId);
     return maybeAuthor.map(this::toResource);
+  }
+
+  @Override
+  @Transactional
+  public AuthorResource createAuthor(AuthorCreateDto dto) {
+    //TODO
+    return null;
   }
 
   @NonNull

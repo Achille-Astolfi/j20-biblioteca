@@ -5,4 +5,6 @@ import java.util.Optional;
 
 public interface AuthorService {
    Optional<AuthorResource> readAuthorById(@NotNull Long authorId);
+
+   AuthorResource createAuthor(AuthorCreateDto dto);
 }
