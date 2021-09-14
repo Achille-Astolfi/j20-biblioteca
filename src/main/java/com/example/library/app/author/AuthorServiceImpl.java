@@ -2,6 +2,7 @@ package com.example.library.app.author;
 
 import com.example.library.app.book.Book;
 import com.example.library.app.book.BookRepository;
+import com.example.library.model.author.AuthorCreateDTO;
 import com.example.library.model.author.AuthorResource;
 import com.example.library.model.author.AuthorService;
 import com.example.library.model.book.BookResource;
@@ -26,6 +27,12 @@ public class AuthorServiceImpl implements AuthorService {
   public Optional<AuthorResource> readAuthorById(Long authorId) {
     Optional<Author> maybeAuthor = this.authorRepository.findById(authorId);
     return maybeAuthor.map(this::toResource);
+  }
+
+  @Override
+  public AuthorResource createAuthor(AuthorCreateDTO dto) {
+    //TODO
+    return null;
   }
 
   //Mapstruct mi permette di fare questa operazione in modo automatico
