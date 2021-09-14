@@ -15,10 +15,12 @@ public class AuthorServiceImpl implements AuthorService {
 
   private final AuthorRepository authorRepository;
 
+  private final AuthorMapper authorMapper;
+
   @PostConstruct
   private void caricaAutori() {
-    Author king = Author.builder().lastname("King").firstname("Stephen").build();
-    Author rowling = Author.builder().lastname("Rowling").firstname("J. K.").build();
+    Author king = Author.builder().lastName("King").firstName("Stephen").build();
+    Author rowling = Author.builder().lastName("Rowling").firstName("J. K.").build();
     king = this.authorRepository.save(king);
     rowling = this.authorRepository.save(rowling);
   }
@@ -31,10 +33,11 @@ public class AuthorServiceImpl implements AuthorService {
 
   @NonNull
   private AuthorResource toResource(@NonNull Author author){
-    AuthorResource resource = new AuthorResource();
-    resource.setId(author.getId());
-    resource.setFirstName(author.getFirstname());
-    resource.setLastName(author.getLastname());
-    return  resource;
+//    AuthorResource resource = new AuthorResource();
+//    resource.setId(author.getId());
+//    resource.setFirstName(author.getFirstname());
+//    resource.setLastName(author.getLastname());
+//    return  resource;
+    return this.authorMapper.toResource(author);
   }
 }

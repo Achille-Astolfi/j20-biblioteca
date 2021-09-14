@@ -33,10 +33,10 @@ public class Author {
   private long id;
 
   @Column(name = "last_name", nullable = false)
-  private String lastname;
+  private String lastName;
 
   @Column(name = "first_name")
-  private String firstname;
+  private String firstName;
 
   //la comodità di avere un campo List<book> nelal class Author is scontra con
   // rischi di strane/inaspettate eccezioni e scarse perfomance limitate

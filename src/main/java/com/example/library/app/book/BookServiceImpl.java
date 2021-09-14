@@ -17,13 +17,14 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
     // unisamo un metodo per caridare dei dati finti nel db
     // il metodo può essere rpivate , protector o public
     // annotato come PostConstructor verrà eseguito dopo il costruttore e dopo aver risolto tutte le dipendenze
     @PostConstruct
     private void caricaDatiFinti(){
-        Author king = Author.builder().lastname("King").firstname("Stephen").build();
-        Author rowling = Author.builder().lastname("Rowling").firstname("J. K.").build();
+        Author king = Author.builder().lastName("King").firstName("Stephen").build();
+        Author rowling = Author.builder().lastName("Rowling").firstName("J. K.").build();
         // per inserire o aggiornare un record di DB si usa il metodo Save del repository
         // questo metodo è disponibile in tutte le impelemntazioni CRUD di spring data
         // è molto importare riaccegnare la variabile quando si usa il metodo save, perchè potrebbe essere un oggetto diverso,a nche se n
@@ -53,11 +54,12 @@ public class BookServiceImpl implements BookService {
     // NonNull serve solo a ricordare che non deve essere null
     @NonNull
     private BookResource toResource(@NonNull Book book){
-        BookResource resource = new BookResource();
-        resource.setId(book.getId());
-        resource.setTitle(book.getTitle());
-        // TODO ci vorrebbe un metodo che controlli su getAtuthor() chenon sia null
-        resource.setAuthor(String.format("%s %s", book.getAuthor().getFirstname(), book.getAuthor().getLastname()));
-        return  resource;
+//        BookResource resource = new BookResource();
+//        resource.setId(book.getId());
+//        resource.setTitle(book.getTitle());
+//        // TODO ci vorrebbe un metodo che controlli su getAtuthor() chenon sia null
+//        resource.setAuthor(String.format("%s %s", book.getAuthor().getFirstname(), book.getAuthor().getLastname()));
+//        return  resource;
+        return this.bookMapper.toResource(book);
     }
 }
