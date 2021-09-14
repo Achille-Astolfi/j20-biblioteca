@@ -16,6 +16,7 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
     //Usiamo un metodo per caricare dei dati finti nel DB, tanto ogni volta vengono azzerati
     //Il metodo può essere private "package protected" protected o public
     //Lo annoto con PostConstruct; viene invocato da Spring dopo il costruttore e dopo aver
@@ -63,12 +64,14 @@ public class BookServiceImpl implements BookService {
     @NonNull
     private BookResource toResource(@NonNull Book book) {
         //fa a mano quello che farà il mapstruct
-        BookResource resource = new BookResource();
+       /* BookResource resource = new BookResource();
         resource.setId(book.getId());
         resource.setTitle(book.getTitle());
         //TODO: ci vorrebbe un controllo su getAuthor che non sia null
         resource.setAuthor(String.format("%s %s", book.getAuthor().getFirstName(), book.getAuthor().getLastName()));
-        return resource;
+        return resource;*/
+        //mapstruct
+        return this.bookMapper.toResource(book);
 
     }
 }

@@ -19,7 +19,6 @@ public class AuthorsController {
   @GetMapping("/{authorId}")
   public ResponseEntity<AuthorResource> getAuthorSingle(@PathVariable Long authorId){
     Optional<AuthorResource> value = this.getAuthorSingleOrchestrator.getAuthorSingle(authorId);
-    System.out.println("Ciao Giacomo");
     return ResponseEntity.of(value);
   }
 }
