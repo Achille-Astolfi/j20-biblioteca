@@ -17,7 +17,7 @@ public interface BookMapper {
 //    String map(Author value);
     default String map(Author value) {
         // l'implementazione l'avevamo abbozzata dentro il metodo di BookServiceImpl
-        // possiamo addirittura risolvere il "TODO"
+        // possiamo addirittura risolvere il "exTODO"
         if (value == null) {
             return null;
         }

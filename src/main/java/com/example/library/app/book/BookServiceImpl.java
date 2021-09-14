@@ -72,7 +72,7 @@ public class BookServiceImpl implements BookService {
 //        BookResource resource = new BookResource();
 //        resource.setId(book.getId());
 //        resource.setTitle(book.getTitle());
-//        // TODO: ci vorrebbe un controllo su getAuthor() che non sia null
+//        // exTODO: ci vorrebbe un controllo su getAuthor() che non sia null
 //        resource.setAuthor(String.format("%s %s", book.getAuthor().getFirstName(), book.getAuthor().getLastName()));
 //        return resource;
         return this.bookMapper.toResource(book);
