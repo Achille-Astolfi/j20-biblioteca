@@ -16,6 +16,8 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
+    // aggiungo nelle dipendenze il mapper di mapStruct
+    private final BookMapper bookMapper;
 
     // usiamo un metodo per caricare dei dati finti nel DB, tanto ogni volta vengono azzerati
     // Il metodo può essere private "package protected" protected o public
@@ -66,13 +68,14 @@ public class BookServiceImpl implements BookService {
     // annotation, dando dei warning se è necessario darli
     @NonNull
     private BookResource toResource(@NonNull Book book) {
-        // facciamo a manina quello che poi faremo fare a mapstruct
-        BookResource resource = new BookResource();
-        resource.setId(book.getId());
-        resource.setTitle(book.getTitle());
-        // TODO: ci vorrebbe un controllo su getAuthor() che non sia null
-        resource.setAuthor(String.format("%s %s", book.getAuthor().getFirstName(), book.getAuthor().getLastName()));
-        return resource;
+//        // facciamo a manina quello che poi faremo fare a mapstruct
+//        BookResource resource = new BookResource();
+//        resource.setId(book.getId());
+//        resource.setTitle(book.getTitle());
+//        // TODO: ci vorrebbe un controllo su getAuthor() che non sia null
+//        resource.setAuthor(String.format("%s %s", book.getAuthor().getFirstName(), book.getAuthor().getLastName()));
+//        return resource;
+        return this.bookMapper.toResource(book);
     }
 
 }

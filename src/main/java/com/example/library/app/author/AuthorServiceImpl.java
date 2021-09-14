@@ -13,6 +13,10 @@ import java.util.Optional;
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
 
+    // posso dichiarare la dipendenza sul mapper di MapStruct come una normale dipendenza
+    // Spring - sul tipo interface
+    private final AuthorMapper authorMapper;
+
     @Override
     public Optional<AuthorResource> readAuthorById(Long authorId) {
         Optional<Author> maybeAuthor = this.authorRepository.findById(authorId);
@@ -21,10 +25,11 @@ public class AuthorServiceImpl implements AuthorService {
 
     @NonNull
     private AuthorResource toResource(@NonNull Author author) {
-        AuthorResource resource = new AuthorResource();
-        resource.setId(author.getId());
-        resource.setFirstName(author.getFirstName());
-        resource.setLastName(author.getLastName());
-        return resource;
+//        AuthorResource resource = new AuthorResource();
+//        resource.setId(author.getId());
+//        resource.setFirstName(author.getFirstName());
+//        resource.setLastName(author.getLastName());
+//        return resource;
+        return this.authorMapper.toResource(author);
     }
 }
