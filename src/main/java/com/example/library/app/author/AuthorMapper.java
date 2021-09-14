@@ -1,7 +1,9 @@
 package com.example.library.app.author;
 
+import com.example.library.model.author.AuthorCreateDto;
 import com.example.library.model.author.AuthorResource;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 // la interface AuthorMapping che voglio definire come mapping di mapstruct
 // funziona come un service (o un qualunque component) di Spring
@@ -18,4 +20,9 @@ public interface AuthorMapper {
     // e i set nel tipo restituito
     // Per convenzione i metodi inziano per "to"
     AuthorResource toResource(Author entity);
+
+    // per creare un record di DB e lasciare al DB l'incombenza di assegnare l'id
+    // sono certo al 100% che NON devo dare un valore alla property id dell'entity
+    @Mapping(target = "id", ignore = true)
+    Author toEntity(AuthorCreateDto dto);
 }

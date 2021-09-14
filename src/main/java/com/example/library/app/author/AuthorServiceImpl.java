@@ -1,5 +1,6 @@
 package com.example.library.app.author;
 
+import com.example.library.model.author.AuthorCreateDto;
 import com.example.library.model.author.AuthorResource;
 import com.example.library.model.author.AuthorService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,12 @@ public class AuthorServiceImpl implements AuthorService {
     public Optional<AuthorResource> readAuthorById(Long authorId) {
         Optional<Author> maybeAuthor = this.authorRepository.findById(authorId);
         return maybeAuthor.map(this::toResource);
+    }
+
+    @Override
+    public AuthorResource createAuthor(AuthorCreateDto dto) {
+        // TODO
+        return null;
     }
 
     @NonNull
