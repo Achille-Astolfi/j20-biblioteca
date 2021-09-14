@@ -7,6 +7,7 @@ import com.example.library.model.author.AuthorResource;
 import com.example.library.model.author.AuthorService;
 import com.example.library.model.book.BookResource;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class AuthorServiceImpl implements AuthorService {
   }
 
   @Override
+  @Transactional
   public AuthorResource createAuthor(AuthorCreateDTO dto) {
     //TODO
     return null;
