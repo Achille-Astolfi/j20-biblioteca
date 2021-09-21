@@ -34,7 +34,9 @@ public class AuthorServiceImpl implements AuthorService {
   }
 
   @Override
-  @Transactional
+  @Transactional //per fare delle operazioni sul DB non in sola lettura,
+  // ma per creare un nuovo record sulla tabella (author in questo caso)
+  //
   public AuthorResource createAuthor(AuthorCreateDto dto) {
     //TODO
     return null;
