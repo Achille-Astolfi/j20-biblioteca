@@ -3,7 +3,9 @@ package com.example.library.app.authorendpoint;
 import com.example.library.model.author.AuthorCreateDTO;
 import com.example.library.model.author.AuthorResource;
 import com.example.library.model.book.BookResource;
+import java.net.URI;
 import java.util.Optional;
+import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,12 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/authors")
 @RequiredArgsConstructor
 public class AuthorsController {
   private final GetAuthorSingleOrchestrator getAuthorSingleOrchestrator;
+  private final PostAuthorCreateOrchestrator postAuthorCreateOrchestrator;
 
   @GetMapping("/{authorId}")
   public ResponseEntity<AuthorResource> getAuthorSingle(@PathVariable Long authorId){
@@ -41,6 +45,18 @@ public class AuthorsController {
   //l'annotation RequestBody significa che mi aspetto un body in request il cui modello
   //è il tipo del parametro annotato
   public ResponseEntity<?> postAuthorCreate(@RequestBody AuthorCreateDTO dto){
-    return ResponseEntity.noContent().build();
+    //siccome required=true è valore di default, sono sicuro che nel giro corretto dto
+    //non è null, quindi non ho controlli da fare
+    AuthorResource resource = this.postAuthorCreateOrchestrator.postAuthorCreate(dto);
+    //SE il frontend mi chiede di rispondere 200, la risposta è:
+    //return ResponseEntity.ok(resource);
+    //ResponseEntity.of se ho un optional, ResponseEntity.ok se l'oggetto è sicuramente non null
+    Long authorId = resource.getId();
+    //Ho un API di Spring che mi permette di costruire la URI completa di una GET
+    //partendo dall'invocazione "finta" del metodo
+    URI uri= MvcUriComponentsBuilder.fromMethodCall(
+        MvcUriComponentsBuilder
+            .on(this.getClass()).getAuthorSingle(authorId)).build().toUri();
+    return ResponseEntity.created(uri).build();
   }
 }

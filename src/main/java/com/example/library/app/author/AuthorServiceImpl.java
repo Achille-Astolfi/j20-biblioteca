@@ -31,7 +31,7 @@ public class AuthorServiceImpl implements AuthorService {
   }
 
   @Override
-  @Transactional
+  @Transactional()
   public AuthorResource createAuthor(AuthorCreateDTO dto) {
     //TODO
     return null;
