@@ -28,8 +28,14 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public AuthorResource createAuthor(AuthorCreateDto dto) {
-        // TODO
-        return null;
+        // abbiamo le dipendenze, abbiamo i metodi
+        // con toEntity creo la entity da inserire nel DB
+        Author entity = this.authorMapper.toEntity(dto);
+        // è importantissimo riassegnare il valore di entity
+        entity = this.authorRepository.save(entity);
+        // con toResource creo la resource ossia l'oggetto che rappresenta
+        // l'entity
+        return this.authorMapper.toResource(entity);
     }
 
     @NonNull
