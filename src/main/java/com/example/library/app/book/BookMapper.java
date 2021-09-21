@@ -1,11 +1,21 @@
 package com.example.library.app.book;
 
 import com.example.library.app.author.Author;
+import com.example.library.app.author.AuthorMapper;
+import com.example.library.model.book.BookCreateDto;
 import com.example.library.model.book.BookResource;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = AuthorMapper.class)
 public interface BookMapper {
+  
+  @Mapping(target = "id", ignore = true)
+  //trasferiamo authorId del Dto nel campo id dell'author dell'entity
+  @Mapping(target = "author.id", source = "authorId")
+    //nel caso complesso abbiamo bisogno di un mapper più completo che vada a prendere i valori di firstName
+    //e di lastName dall'AuthorCreateDto
+  Book toEntity(BookCreateDto dto);
 
   //per tutte le property che non voglio mappare ho la possibilità di dichiarare una annotation
   //sul metodo: @Mapping(target = "cavallo", ignore = true)
@@ -22,4 +32,15 @@ public interface BookMapper {
     }
     return String.format("%s %s", value.getFirstName(), value.getLastName());
   }
+
+
+/*  default Author map(Long authorId){
+    if(authorId == null) {
+      return null;
+    }
+    return Author.builder()
+        .id(authorId)
+        .build();
+  }*/
+
 }

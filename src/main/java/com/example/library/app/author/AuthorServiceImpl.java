@@ -33,8 +33,12 @@ public class AuthorServiceImpl implements AuthorService {
   @Override
   @Transactional()
   public AuthorResource createAuthor(AuthorCreateDTO dto) {
-    //TODO
-    return null;
+    //con toEntity creo la entity da inserire nel DB
+   Author entity = this.authorMapper.toEntity(dto);
+   //importantissimo riassegnare il valore di entity
+   entity = this.authorRepository.save(entity);
+   //con to Resource creo la resource ossia l'oggetto che rappresenta l'entity
+    return this.authorMapper.toResource(entity);
   }
 
   //Mapstruct mi permette di fare questa operazione in modo automatico

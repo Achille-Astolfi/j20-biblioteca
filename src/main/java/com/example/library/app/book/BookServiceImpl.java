@@ -2,9 +2,11 @@ package com.example.library.app.book;
 
 import com.example.library.app.author.Author;
 import com.example.library.app.author.AuthorRepository;
+import com.example.library.model.book.BookCreateDto;
 import com.example.library.model.book.BookResource;
 import com.example.library.model.book.BookService;
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,33 @@ public class BookServiceImpl implements BookService {
         Optional<Book> maybeBook = this.bookRepository.findById(bookId);
         //maybeBook ha un metodo map che prende in argomento un method reference
         return maybeBook.map(this::toResource);
+    }
+
+    @Override
+    @Transactional
+    public BookResource createBook(BookCreateDto dto) {
+        Book book = this.bookMapper.toEntity(dto);
+        //quando si lavora con JPA le cose devono essere fatte con cautela..
+        //Il mapper crea un oggetto (new) Author che però riferisce
+        //un refcord di DB già esistente; questa non va bene, perché
+        //se il record di SB esiste, l'oggetto Author deve essere
+        //creato (new) da Hibernate (o chi per esso).
+        //NB: a noi non interessa fare veramente la select sulla tabella author
+        //a noi interessa solo avere l'oggetto gestito da Hibernate
+        Long idEsistente = book.getAuthor().getId(); //NON è vero
+        //l'oggetto esistente è quello che ottengo facendo getOne dal repository
+        //NB: nel caso complicato se idEsistente == null allora creo un nuovo author
+        //altrimenti procedo come nel resto di questo metodo
+        Author esistente = this.authorRepository.getOne(idEsistente);
+        //se Hibernate ha già creato l'oggetto Author corrispondente all'id,
+        //mi restituisce l'oggetto, se invece non l'ha creato, Hibernate restituisce
+        //un "proxy" dell'oggetto; solo quando faremo per esempio esistente.getFirstName()
+        //allora Hibernate eseguirà la SELECT sul DB
+        //In nessuno dei due csi quindi il metodo getOne fa SELECT sul DB
+        //esistente è diverso da book.detAuthor(), quindi lo devo riassegnare
+        book.setAuthor(esistente);
+        book = this.bookRepository.save(book);
+        return toResource(book);
     }
 
     //per semplificarci la vita scriviamo un metodo che ha
