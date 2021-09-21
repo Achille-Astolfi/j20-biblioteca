@@ -5,14 +5,20 @@ import com.example.library.model.author.AuthorResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
+
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.fromMethodCall;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 
 @RestController
 @RequestMapping("/authors")
 @RequiredArgsConstructor
 public class AuthorsController {
     private final GetAuthorSingleOrchestrator getAuthorSingleOrchestrator;
+    private final PostAuthorCreateOrchestrator postAuthorCreateOrchestrator;
 
     @GetMapping("/{authorId}")
     public ResponseEntity<AuthorResource> getAuthorSingle(@PathVariable Long authorId) {
@@ -35,6 +41,16 @@ public class AuthorsController {
     // L'annotation RequestBody significa che mi aspetto un body in request il cui modello
     // è il tipo del parametro annotato
     public ResponseEntity<?> postAuthorCreate(@RequestBody AuthorCreateDto dto) {
-        return ResponseEntity.noContent().build();
+        // siccome required=true è valore di default, sono sicuro che nel giro corretto
+        // dto non è null, quindi non ho controlli da fare
+        AuthorResource resource = this.postAuthorCreateOrchestrator.postAuthorCreate(dto);
+        // SE il front-end mi chiede di rispondere 200, ecco la risposta:
+        // of se ho un optional, ok se ho l'oggetto "sicuramente" non-null
+//        return ResponseEntity.ok(resource);
+        Long authorId = resource.getId();
+        // Ho un'API di Spring che mi permette di costruire la URI completa di una GET
+        // partendo dall'invocazione "finta" del metodo
+        URI uri = fromMethodCall(on(this.getClass()).getAuthorSingle(authorId)).build().toUri();
+        return ResponseEntity.created(uri).build();
     }
 }
