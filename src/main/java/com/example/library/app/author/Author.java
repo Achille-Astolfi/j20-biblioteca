@@ -1,10 +1,7 @@
 package com.example.library.app.author;
 
 import com.example.library.app.book.Book;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "author")
 @Getter
+@Setter
 // in alternativa ai Setter potrei usare Builder
 @Builder
 // se uso Builder devo aggiungere le annotation NoArgsContructor e AllArgsConstructor
