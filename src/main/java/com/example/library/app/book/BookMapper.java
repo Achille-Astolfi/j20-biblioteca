@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = AuthorMapper.class)
 public interface BookMapper {
-  
+
   @Mapping(target = "id", ignore = true)
   //trasferiamo authorId del Dto nel campo id dell'author dell'entity
   @Mapping(target = "author.id", source = "authorId")
