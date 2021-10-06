@@ -1,18 +1,13 @@
 package com.example.library.app.author;
 
 import com.example.library.app.book.Book;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -41,8 +36,8 @@ public class Author {
   //la comodità di avere un campo List<book> nelal class Author is scontra con
   // rischi di strane/inaspettate eccezioni e scarse perfomance limitate
   //annotation per uno a molti
-  @OneToMany(mappedBy = "author")
+//@OneToMany(mappedBy = "author")
   // l'annotation gella di JoinColum non esuste ma esiste un attributi di OneToMany, : mappedBy
   // il valore dell'attributo è il nome del campo (non della colonna di DB)
-  private List<Book> books;
+//private List<Book> books;
 }

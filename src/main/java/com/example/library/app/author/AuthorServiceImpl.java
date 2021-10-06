@@ -1,15 +1,15 @@
-package com.example.library.app.author;
 
+package com.example.library.app.author;
 
 import com.example.library.model.author.AuthorCreateDto;
 import com.example.library.model.author.AuthorResource;
 import com.example.library.model.author.AuthorService;
-import java.util.Optional;
-import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,10 +36,14 @@ public class AuthorServiceImpl implements AuthorService {
   @Override
   @Transactional //per fare delle operazioni sul DB non in sola lettura,
   // ma per creare un nuovo record sulla tabella (author in questo caso)
-  //
+
   public AuthorResource createAuthor(AuthorCreateDto dto) {
-    //TODO
-    return null;
+    // on toEntity si crea la entity da inserire nel DB
+    Author entity = this.authorMapper.toEntity(dto);
+    // importante riassegnare il valore entity
+    entity = this.authorRepository.save(entity);
+    // con toResourse creo la resourse ossia l'oggetto che rappresenta l'entity
+    return this.authorMapper.toResource(entity);
   }
 
   @NonNull

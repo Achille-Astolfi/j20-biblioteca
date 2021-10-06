@@ -2,10 +2,12 @@ package com.example.library.app.authorendpoint;
 
 import com.example.library.model.author.AuthorResource;
 import com.example.library.model.author.AuthorService;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Objects;
+import java.util.Optional;
+
 
 @Component
 @RequiredArgsConstructor

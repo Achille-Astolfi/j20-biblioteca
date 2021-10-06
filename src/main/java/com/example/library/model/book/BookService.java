@@ -6,4 +6,6 @@ public interface BookService {
     // il service deve trovare BookResource partendo dall'id
     // si consiglia di usare java.util.Optional
     Optional<BookResource> readBookById(Long bookId);
+    BookResource createBook(BookCreateDto dto);
+
 }

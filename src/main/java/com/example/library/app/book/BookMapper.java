@@ -1,6 +1,7 @@
 package com.example.library.app.book;
 
 import com.example.library.app.author.Author;
+import com.example.library.model.book.BookCreateDto;
 import com.example.library.model.book.BookResource;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,11 +9,26 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 
 public interface BookMapper {
-  // per tutte l eproperty che non voglio mappare ho la possibilità
-  // di usare una annotation sul metodo
+  @Mapping(target="id", ignore = true)
+  // trasferiamo authorId del Dto nel campo id dell'author dell'entity
+ @Mapping(target = "author", source = "authorId")
 
-  @Mapping(target = "cavallo", ignore = true)
+  Book toEntity(BookCreateDto createDto);
+
+  // per tutte le property che non voglio mappare ho la possibilità
+  // di usare una annotation sul metodo
+  default Author map(Long authorId) {
+    if (authorId == null) {
+      return null;
+    }
+    return Author.builder()
+        .id(authorId)
+        .build();
+  }
+//  @Mapping(target = "cavallo", ignore = true)
   BookResource toResource (Book entity);
+
+
 
   default String map (Author value){
     if (value ==null){
