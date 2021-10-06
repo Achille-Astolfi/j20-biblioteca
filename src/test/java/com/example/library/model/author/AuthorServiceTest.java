@@ -101,6 +101,24 @@ class AuthorServiceTest {
 
     @Test
     void createAuthorTest() {
+        // leggo sullo Use Case la normale operatività
+        // a fronte della richiesta di inserimento di un nuovo autore
+        // fornendo nome e cognome mi aspetto di creare una nuova resource
+        // come da richiesta del "client"; in esercizio il client è l'orchestrator
+        // durante i test il "client" è proprio questo metodo qui
+        AuthorCreateDto inputDto = new AuthorCreateDto();
+        inputDto.setFirstName("Grazia");
+        inputDto.setLastName("Deledda");
+        AuthorResource output = this.authorService.createAuthor(inputDto);
+        // mi aspetto che output sia non null
+        assertNotNull(output);
+        // e mi aspetto che il nome e il cognome dell'output siano uguali al nome e
+        // cognome del dto
+        assertEquals(inputDto.getFirstName(), output.getFirstName());
+        assertEquals(inputDto.getLastName(), output.getLastName());
+        // Il test è fallito; il problema era nella class Author.java
+        // La soluzione è aggiungere @Setter alla class e togliere @Builder
+        // TODO: devo ricordarmi di togliere @Builder
     }
 
     @Test
