@@ -22,6 +22,7 @@ public class BookServiceImpl implements BookService {
     // unisamo un metodo per caridare dei dati finti nel db
     // il metodo può essere rpivate , protector o public
     // annotato come PostConstructor verrà eseguito dopo il costruttore e dopo aver risolto tutte le dipendenze
+    @PostConstruct
     private void caricaDatiFinti() {
         Author king = Author.builder()
             .lastName("King")

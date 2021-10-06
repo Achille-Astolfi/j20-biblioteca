@@ -1,31 +1,37 @@
 package com.example.library.app.author;
 
 import com.example.library.app.book.Book;
+import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.List;
+import lombok.Setter;
 
 
-@Entity
-@Table(name = "author")
 
 @Getter
+@Setter
 // in alternativa ai setter si possono usare i Builder
 @Builder
 // se si usa il builder si devono aggiungere le annotaion NoArgsConstructor e AllArgsConstructor
 // perchè NoArgsConstructor serve a Hibernate e AllArgsContructor serve al Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "author")
 public class Author {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "author_id")
-  private long id;
+  public Long id;
 
   @Column(name = "last_name", nullable = false)
   private String lastName;

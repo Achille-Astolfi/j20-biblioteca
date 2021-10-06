@@ -2,17 +2,14 @@ package com.example.library.app.bookendpoint;
 
 import com.example.library.model.book.BookCreateDto;
 import com.example.library.model.book.BookResource;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
+
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.fromMethodCall;
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 
@@ -36,10 +33,10 @@ public class BooksController {
     }
 
     @PostMapping
-    ResponseEntity<?> postBookCreate(@RequestBody BookCreateDto dto){
+    ResponseEntity<?> postBookCreate(@RequestBody BookCreateDto dto) {
         BookResource resource = this.postBookCreateOrchestrator.postBookCreate(dto);
         Long bookId = resource.getId();
-        URI uri = fromMethodCall(on(this.getClass()).getBookSingle(bookId)).build().toUri();
-        return ResponseEntity.created(uri).build();
+        URI location = fromMethodCall(on(getClass()).getBookSingle(bookId)).build().toUri();
+        return ResponseEntity.created(location).build();
     }
 }

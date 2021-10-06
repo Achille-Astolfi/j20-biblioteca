@@ -17,12 +17,11 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 @RequestMapping("/authors")
 @RequiredArgsConstructor
 public abstract class AuthorsController {
-
   private final GetAuthorSingleOrchestrator getAuthorSingleOrchestrator;
-  private final PostAuthorCreateOrchestrator postAuthorCreateOrcherstrator;
+  private final PostAuthorCreateOrchestrator postAuthorCreateOrchestrator;
 
   @GetMapping("/{authorId}")
-  ResponseEntity<AuthorResource> getAuthorSingle(@PathVariable Long authorId) {
+  public ResponseEntity<AuthorResource> getAuthorSingle(@PathVariable Long authorId){
     Optional<AuthorResource> value = this.getAuthorSingleOrchestrator.getAuthorSingle(authorId);
     return ResponseEntity.of(value);
   }
@@ -38,12 +37,14 @@ public abstract class AuthorsController {
   // l'annotation Request Body signfica che mi aspetto un body in request
   // il cui modello è il tipo del parametro annotato
   public ResponseEntity<?> postAuthorCreate(@RequestBody AuthorCreateDto dto) {
-    AuthorResource resource =  this.postAuthorCreateOrcherstrator.postAuthorCreate(dto);
+    AuthorResource resource = this.postAuthorCreateOrchestrator.postAuthorCreate(dto);
     // return ResponseEntity.ok(resource);
     Long authorId = resource.getId();
     // esiste una API di Spring che permette di costruire una URI di una GET
     // partendo dall'invocazione Finta del metodo
-    URI uri = fromMethodCall(on(this.getClass()).getAuthorSingle(authorId)).build().toUri();
+    URI uri= MvcUriComponentsBuilder.fromMethodCall(
+        MvcUriComponentsBuilder
+            .on(this.getClass()).getAuthorSingle(authorId)).build().toUri();
     return ResponseEntity.created(uri).build();
   }
 }

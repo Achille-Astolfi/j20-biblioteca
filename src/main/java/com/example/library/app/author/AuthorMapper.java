@@ -22,6 +22,6 @@ public interface AuthorMapper {
   // per convenzione i metodi iniziano per "to"
 
   AuthorResource toResource(Author entity);
-  @Mapping(target ="id", ignore = true)
+  @Mapping(target = "id", ignore = true)
   Author toEntity(AuthorCreateDto dto);
 }

@@ -14,11 +14,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
-
   private final AuthorRepository authorRepository;
-
+  //Dichiaro la dipendenza normalmente
   private final AuthorMapper authorMapper;
-
 //  @PostConstruct
 //  private void caricaAutori() {
 //    Author king = Author.builder().lastName("King").firstName("Stephen").build();
@@ -27,6 +25,8 @@ public class AuthorServiceImpl implements AuthorService {
 //    rowling = this.authorRepository.save(rowling);
 //  }
 
+
+
   @Override
   public Optional<AuthorResource> readAuthorById(Long authorId) {
     Optional<Author> maybeAuthor = this.authorRepository.findById(authorId);
@@ -34,7 +34,8 @@ public class AuthorServiceImpl implements AuthorService {
   }
 
   @Override
-  @Transactional //per fare delle operazioni sul DB non in sola lettura,
+  @Transactional
+  //per fare delle operazioni sul DB non in sola lettura,
   // ma per creare un nuovo record sulla tabella (author in questo caso)
 
   public AuthorResource createAuthor(AuthorCreateDto dto) {

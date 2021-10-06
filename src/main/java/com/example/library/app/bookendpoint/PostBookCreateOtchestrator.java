@@ -4,7 +4,6 @@ import com.example.library.model.book.BookCreateDto;
 import com.example.library.model.book.BookResource;
 import com.example.library.model.book.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,8 +16,8 @@ public class PostBookCreateOtchestrator {
   // restituire Long ossia l'id della risorsa creata.
   // NON è obbligatorio, ma ci aiuta a capisci se aggiungiamo le annotation
   // @NonNull al metodo e al parametro
-  @NonNull
-  public BookResource postBookCreate(@NonNull BookCreateDto dto){
+
+  public BookResource postBookCreate(BookCreateDto dto){
     return this.bookService.createBook(dto);
   }
 }

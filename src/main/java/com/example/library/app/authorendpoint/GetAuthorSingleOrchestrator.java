@@ -14,7 +14,7 @@ import java.util.Optional;
 public class GetAuthorSingleOrchestrator {
   private final AuthorService authorService;
 
-  public Optional<AuthorResource> getAuthorSingle(Long authorId) {
+  public Optional<AuthorResource> getAuthorSingle (Long authorId)  {
 
     return Optional.ofNullable(authorId)
         .flatMap(this.authorService::readAuthorById);

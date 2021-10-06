@@ -18,8 +18,8 @@ public class PostAuthorCreateOrchestrator {
   // NON è obbligatorio, ma ci aiuta a capisci se aggiungiamo le annotation
   // @NonNull al metodo e al parametro
   @NonNull
-   public AuthorResource postAuthorCreate(@NonNull AuthorCreateDto authorCreateDto){
-      return this.authorService.createAuthor(authorCreateDto);
+  public AuthorResource postAuthorCreate(@NonNull AuthorCreateDto authorCreateDto) {
+    return this.authorService.createAuthor(authorCreateDto);
    }
 
 }
