@@ -15,7 +15,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Table(name = "author")
 @Getter
+@Setter
 //In alternativa a setter si può usare builder
 @Builder
 //se uso builder devo aggiungere:
@@ -25,8 +28,6 @@ import lombok.Setter;
 //ma in questo modo non ho noargsconstructor che serve a hibernate
 //non metto data perché due entry devono essere considerate uguali solo
 //se hanno id uguale, no confronto su altri campi
-@Entity
-@Table(name = "author")
 public class Author {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

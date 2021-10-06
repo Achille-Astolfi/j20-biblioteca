@@ -10,7 +10,7 @@ public class BookCreateDto {
   //situazione semplificata
   private String title;
   //id dell'autore viene passato grazie al menu a tendina del frontend
-  private String authorId;
+  private Long authorId;
   //situazione più realistica: o mi passa l'authorId oppure addirittura un authorCreateDto
   private AuthorCreateDTO author;
   //ovviamente in questo caso un sistema di validazione deve impedire che vengano
