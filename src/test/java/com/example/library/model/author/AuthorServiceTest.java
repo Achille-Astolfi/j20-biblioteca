@@ -1,7 +1,10 @@
 package com.example.library.model.author;
 
 import com.example.library.app.LibraryBoot;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -36,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
 // Il valore associato all'annotation fa leggere a Spring Boot anche il file
 // application-jupiter.yml che di fatto va a "sovrascrivere" alcuni valori di application.yml
 @ActiveProfiles("jupiter")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AuthorServiceTest {
     // intreccio Jupiter con Spring Framework in due modi
     // 1) dichiarando la dipendenza dal component che è la mia unit
@@ -53,12 +57,13 @@ class AuthorServiceTest {
      * normale operatività)
      */
     @Test
+    @Order(1)
     void readAuthorByIdTest() {
         // a fronte di un input con argomento 1 (o 2 a mia scelta)
         // invoco il metodo readAuthorById
         // mi aspetto che l'output sia un Optional pieno
         // il cui contenuto è un AuthorResource con id uguale al valore di input
-        Long inputId = 2L;
+        Long inputId = 1L;
         Optional<AuthorResource> output = this.authorService.readAuthorById(inputId);
         // Uso i metodi static della class Assertions (vedi import static là sopra)
         assertTrue(output.isPresent());
@@ -100,6 +105,7 @@ class AuthorServiceTest {
     }
 
     @Test
+    @Order(0)
     void createAuthorTest() {
         // leggo sullo Use Case la normale operatività
         // a fronte della richiesta di inserimento di un nuovo autore
