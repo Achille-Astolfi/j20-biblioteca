@@ -7,7 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.library.app.LibraryBoot;
 import java.util.Optional;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -35,6 +38,7 @@ import org.springframework.test.context.ActiveProfiles;
 //Quindi la unit non è composta solo dal componente AuthorServiceImpl, ma
 //dalla catena di componenti AuthorServiceImpl + AuthorMapperImpl
 @ActiveProfiles("jupiter")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AuthorServiceTest {
   //intreccio Jupiter con Spring Framework in due modi:
   //1) dichiariamo la dipendenza dal component che è la mia unit
@@ -49,6 +53,7 @@ public class AuthorServiceTest {
   //I test negativi hanno senso nel bilancio dei costi/benefici
   //Cosa rischio se un particolare metodo va storto?
   @Test
+  @Order(1)
   void readAuthorByIdTest() {
     //a fronte di un input con argomento 1L o 2L (i dati che ho inserito a db)
     //invoco il metodo readAuthorById
@@ -75,10 +80,13 @@ public class AuthorServiceTest {
 
   @Test
   void readAuthorByIdNullArgumentTest() {
+    //se input è null mi aspetto che sia sollevata IllegalArgumentException
+
 
   }
 
   @Test
+  @Order(0)
   void createAuthorTest() {
     //leggo sulla Use Case la normale operatività
     //a fronte della richiesta di inserimento di un nuovo autore
