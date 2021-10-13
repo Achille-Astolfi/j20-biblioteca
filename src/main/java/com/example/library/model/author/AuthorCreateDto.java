@@ -1,5 +1,6 @@
 package com.example.library.model.author;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import lombok.Setter;
 // dati dal frontend al backend; DTO: Data Transfer Object
 @Getter
 @Setter // Setter dipende dalle impostazioni della libreria Jackson
+@Data
 public class AuthorCreateDto {
     // mi aspetto che il front end mi specifichi gli stessi dati con gli stessi nomi
     // cioè: se io gli rispondo con una resource contenente "firstName" e "lastName"
