@@ -1,8 +1,10 @@
 package com.example.library.model.author;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 //create perché è il documento che specifica i dati da usare per creare una nuova resource
 //DTO perché la class Java rappresenta un documento JSON il cuo compito è quello
 //di trasferire dati dal frontend al backend; DTO: Data Transfer Object
