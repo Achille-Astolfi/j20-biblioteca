@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
@@ -67,12 +68,31 @@ class BookServiceTest {
     }
 
     @Test
+    @Order(1)
     void createBookNoTitleTest() {
+        // metto @Order(1) perché ho bisogno di avere un record dentro la tabella author; questo record è creato
+        // nel metodo createBookTest(); questa è solo UNA delle soluzioni possibili. Potrei anche replicare le tre
+        // righe dentro questo metodo o estrarre un metodo private da invocare sia in createBookTest che in questo metodo
+        assertThrows(DataIntegrityViolationException.class, this::createBookNoTitleImpl);
+    }
 
+    private void createBookNoTitleImpl() {
+        // Creiamo un dto con l'autore senza il titolo (mi aspetto DataIntegrityViolation)
+        BookCreateDto inputDto = new BookCreateDto();
+        inputDto.setAuthorId(1L);
+        this.bookService.createBook(inputDto);
     }
 
     @Test
     void createBookNoAuthorTest() {
+        // può essere InvalidDataAccessApiUsageException se commento alcune righe di BookMapper
+        assertThrows(NullPointerException.class, this::createBookNoAuthorImpl);
+    }
 
+    private void createBookNoAuthorImpl() {
+        // Creiamo un dto senza l'autore con il titolo (mi aspetto NullPointerException)
+        BookCreateDto inputDto = new BookCreateDto();
+        inputDto.setTitle("Un libro di autore ignoto");
+        this.bookService.createBook(inputDto);
     }
 }
