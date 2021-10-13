@@ -1,6 +1,7 @@
 package com.example.library.model.author;
 
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import lombok.Setter;
 // DTO data transfer object
 @Getter
 @Setter //dipende dalla impostazioni della libreria di Jackson
+@Data
 public class AuthorCreateDto {
 
   private String firstName;

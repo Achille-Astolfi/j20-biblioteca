@@ -16,7 +16,7 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 @RestController
 @RequestMapping("/authors")
 @RequiredArgsConstructor
-public abstract class AuthorsController {
+public class AuthorsController {
   private final GetAuthorSingleOrchestrator getAuthorSingleOrchestrator;
   private final PostAuthorCreateOrchestrator postAuthorCreateOrchestrator;
 
