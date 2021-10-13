@@ -3,16 +3,20 @@ package com.example.library.model.author;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.library.app.LibraryBoot;
 import java.util.Optional;
+import org.hibernate.PropertyValueException;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 
 //Per convenzione la class per testare la unit Pippo si chiama PippoTest
@@ -80,9 +84,30 @@ public class AuthorServiceTest {
 
   @Test
   void readAuthorByIdNullArgumentTest() {
-    //se input è null mi aspetto che sia sollevata IllegalArgumentException
+    //se input è null mi aspetto che invocando readAuthorById
+    // sia sollevata un'eccezione di Spring Data perché tutte le eccezioni
+    //sollevate dalle class annotate con @Repository vengono incapsulate
+    //in eccezioni di Spring Data
+    //Il metodo per intercettare le eccezioni aattese è assertThrows che vuole
+    //come primo argomento la class dell'eccezione da verificare e come secondo
+    // argomento vuole una "lambda" o un "method reference"
+    //Per semplificare la vita, scriviamo un metodo private dentro questa class di test
+    //con il test da eseguire e che vogliamo sollevi l'eccezione
+    //Ho bisogno di verificare che l'eccezione sollevata abbia come cause IllegalArgumentException
+    //Devo invocare readAuthorByIdNullArgumentImpl non direttamente ma come method reference
+    //Interpreto il method reference non come una invocazione istantanea ma come invocazione differita
+    RuntimeException exception = assertThrows(RuntimeException.class, this::readAuthorByIdNullArgumentImpl);
+    //i più pignoli possono mettere un'assert che getCause sia non null
+    assertNotNull(exception.getCause());
+    //verifica che la cause sia di tipo IllegalArgumentException
+    assertEquals(IllegalArgumentException.class, exception.getCause().getClass());
+  }
 
-
+  //tolgo la parola "Test" perché Sonar non ama molto i medodi che contengono questa parola
+  private void readAuthorByIdNullArgumentImpl() {
+    //questo è il test che voglio eseguire nel metodo readAuthorByIdNUllArgumentTest()
+    //e che voglio che sollevi un'eccezione
+    this.authorService.readAuthorById(null);
   }
 
   @Test
@@ -107,7 +132,25 @@ public class AuthorServiceTest {
 
   @Test
   void createAuthorNoNameTest() {
+    //mi aspetto una exception di Spring Data
+    assertThrows(DataIntegrityViolationException.class, this::createAuthorNoNameImpl);
+    }
 
+  private void createAuthorNoNameImpl() {
+    AuthorCreateDTO dto = new AuthorCreateDTO();
+    this.authorService.createAuthor(dto);
+  }
+
+  @Test
+  void createAuthorNullArgumentTest() {
+    //come sopra readAuthorByIdNullArgumentTest
+   InvalidDataAccessApiUsageException exception = assertThrows(InvalidDataAccessApiUsageException.class, this::createAuthorNullArgumentImpl);
+   assertNotNull(exception.getCause());
+   assertEquals(IllegalArgumentException.class, exception.getCause().getClass());
+  }
+
+  private void createAuthorNullArgumentImpl() {
+    this.authorService.createAuthor(null);
   }
 
 }
