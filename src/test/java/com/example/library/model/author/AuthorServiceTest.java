@@ -1,9 +1,14 @@
 package com.example.library.model.author;
 
 import com.example.library.app.LibraryBoot;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
@@ -36,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 // Il valore associato all'annotation fa leggere a Spring Boot anche il file
 // application-jupiter.yml che di fatto va a "sovrascrivere" alcuni valori di application.yml
 @ActiveProfiles("jupiter")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AuthorServiceTest {
     // intreccio Jupiter con Spring Framework in due modi
     // 1) dichiarando la dipendenza dal component che è la mia unit
@@ -53,12 +59,13 @@ class AuthorServiceTest {
      * normale operatività)
      */
     @Test
+    @Order(1)
     void readAuthorByIdTest() {
         // a fronte di un input con argomento 1 (o 2 a mia scelta)
         // invoco il metodo readAuthorById
         // mi aspetto che l'output sia un Optional pieno
         // il cui contenuto è un AuthorResource con id uguale al valore di input
-        Long inputId = 2L;
+        Long inputId = 1L;
         Optional<AuthorResource> output = this.authorService.readAuthorById(inputId);
         // Uso i metodi static della class Assertions (vedi import static là sopra)
         assertTrue(output.isPresent());
@@ -96,10 +103,33 @@ class AuthorServiceTest {
      */
     @Test
     void readAuthorByIdNullArgumentTest() {
+        // l'obiettivo del test è invocare readAuthorById passando l'argomento null
+        // e verificare che venga sollevata l'eccezione attesa
+        // si tratta di una eccezione di Spring Data perché tutte le eccezione sollevate dalle class
+        // annotate con @Repository vengono incapsulate in queste eccezioni di Spring Data
+        // Il metodo per intercettare le eccezioni attese è assertThrows che vuole come primo argomento
+        // la class dell'eccezione da verificare e come secondo argomento vuole una "lambda" o un "method reference"
+        // Per semplificarci la vita, scriviamo un metodo private dentro questa class di test con il test da eseguire
+        // e che vogliamo sollevi l'eccezione
+        // Ho bisogno di verificare che l'eccezione sollevata abbia come cause IllegalArgumentException
+        // devo invocare readAuthorByIdNullArgumentImpl() non direttamente ma come method reference
+        // Interpreto il method reference non come invocazione istantanea ma come invocazione differita
+        RuntimeException exception = assertThrows(RuntimeException.class, this::readAuthorByIdNullArgumentImpl);
+        // i più pignoli posso mettere un'assert che getCause() sia non null
+        assertNotNull(exception.getCause());
+        // verifico che la cause sia di tipo IllegalArgumentException
+        assertEquals(IllegalArgumentException.class, exception.getCause().getClass());
+    }
 
+    // tolgo la parola "Test" perché Sonar non ama molto i metodi che contengono questa parola
+    private void readAuthorByIdNullArgumentImpl() {
+        // questo è il test che voglio eseguire nel metodo readAuthorByIdNullArgumentTest() e che voglio che
+        // sollevi una eccezione
+        this.authorService.readAuthorById(null);
     }
 
     @Test
+    @Order(0)
     void createAuthorTest() {
         // leggo sullo Use Case la normale operatività
         // a fronte della richiesta di inserimento di un nuovo autore
@@ -123,11 +153,25 @@ class AuthorServiceTest {
 
     @Test
     void createAuthorNoNameTest() {
+        // mi aspetto una "non so quale exception" di Spring Data
+        assertThrows(DataIntegrityViolationException.class, this::createAuthorNoNameImpl);
+    }
 
+    private void createAuthorNoNameImpl() {
+        // creo un DTO ma non imposto né firstName né lastName
+        AuthorCreateDto dto = new AuthorCreateDto();
+        this.authorService.createAuthor(dto);
     }
 
     @Test
     void createAuthorNullArgumentTest() {
+        // come sopra readAuthorByIdNullArgumentTest
+        InvalidDataAccessApiUsageException exception = assertThrows(InvalidDataAccessApiUsageException.class, this::createAuthorNullArgumentImpl);
+        assertNotNull(exception.getCause());
+        assertEquals(IllegalArgumentException.class, exception.getCause().getClass());
+    }
 
+    private void createAuthorNullArgumentImpl() {
+        this.authorService.createAuthor(null);
     }
 }
