@@ -1,40 +1,37 @@
 package com.example.library.app.author;
 
-import com.example.library.app.book.Book;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.*;
-import java.util.List;
-
-@Entity
-@Table(name = "author")
+// esistono le annotation @Table e @Column
+// bisogna fare un po' di esperimenti con il DB di produzione per capire se
+// il value da specificare va scritto maiuscolo o minuscolo;
+// fatti esperimenti con Oracle, PostgreSQL, DB2, H2: il maiuscolo funziona con tutti
+// MySQL non funziona, occorre mettere minuscolo, e poi occorre mettere le doppie virgolette
+// nelle sql dei test.
+// NOTA BENE: le annotation vanno usate solo se strettamente necessario
+// vi lascio le annotation sulla class solo per dirvi che esistono
+@Table("author")
+// mancano le annotation di Lombok
+// il minimo sindacale suggerito dalla documentazione è @Getter e @AllArgsConstructor
+// invece sappiamo che la strada più comoda è @Getter e @Setter col costruttore di default
 @Getter
 @Setter
-// in alternativa ai Setter potrei usare Builder
-@Builder
-// se uso Builder devo aggiungere le annotation NoArgsContructor e AllArgsConstructor
-// perché NoArgsConstructor serve a Hibernate e AllArgsConstructor serve al Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Author {
+    // scritta com'era prima corrisponderebbe alla colonna id
+    // diciamo che la preferenza è sempre quella di usare il camelCase corrispondente
+    // per evitare il più possibile di riscrivere codice
+    @Column("author_id")
+    // manca l'annotation @Id
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "author_id")
-    private Long id;
-
-    @Column(name = "last_name", nullable = false)
+    private Long authorId;
+    // in automatico Spring Data JDBC trasforma i nomi delle colonne in
+    // snail_case nei campi con il corrispondente camelCase:
+    // corrisponde alla colonna last_name
     private String lastName;
-
-    // annotation non obbligatoria
-    @Column(name = "first_name")
+    // corrisponde alla colonna first_name
     private String firstName;
-
-    // la comodità di avere un campo List<Book> nella class Author si scontra (spesso) con
-    // rischi connessi a "strane/inaspettate eccezioni" e "performance limitate"
-    // Niente di grave, si possono sistemare, ma c'è da chiedersi: vale davvero la pena?
-    // l'annotation "gemella" di ManyToOne è OneToMany
-    // l'annotation "gemella" di JoinColumn non c'è, è un attributo di OneToMany: mappedBy
-    // il valore dell'attributo è il nome del campo (non della colonna di DB)
-//    @OneToMany(mappedBy = "author")
-//    private List<Book> books;
 }

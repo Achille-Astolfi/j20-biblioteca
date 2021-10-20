@@ -10,7 +10,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.relational.core.conversion.DbActionExecutionException;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
 
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(classes = LibraryBoot.class)
 @ActiveProfiles("jupiter")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Sql({"/author.sql", "/book.sql"})
 class BookServiceTest {
     // anche in questo caso unit = component (come punto di partenza)
     @Autowired
@@ -73,7 +76,7 @@ class BookServiceTest {
         // metto @Order(1) perché ho bisogno di avere un record dentro la tabella author; questo record è creato
         // nel metodo createBookTest(); questa è solo UNA delle soluzioni possibili. Potrei anche replicare le tre
         // righe dentro questo metodo o estrarre un metodo private da invocare sia in createBookTest che in questo metodo
-        assertThrows(DataIntegrityViolationException.class, this::createBookNoTitleImpl);
+        assertThrows(DbActionExecutionException.class, this::createBookNoTitleImpl);
     }
 
     private void createBookNoTitleImpl() {
@@ -86,7 +89,7 @@ class BookServiceTest {
     @Test
     void createBookNoAuthorTest() {
         // può essere InvalidDataAccessApiUsageException se commento alcune righe di BookMapper
-        assertThrows(NullPointerException.class, this::createBookNoAuthorImpl);
+        assertThrows(DbActionExecutionException.class, this::createBookNoAuthorImpl);
     }
 
     private void createBookNoAuthorImpl() {
