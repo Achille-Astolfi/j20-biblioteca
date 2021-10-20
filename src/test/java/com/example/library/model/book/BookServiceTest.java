@@ -56,6 +56,7 @@ class BookServiceTest {
 
     @Test
     void createBookNoAuthorTest() {
-
+        //può essere InvalidDataAccessApiUsageException se commento alcune righe di BookMapper
+        assertThrows(NullPointerException.class, this::createBookNoAuthorImpl);
     }
 }
