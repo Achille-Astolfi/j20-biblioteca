@@ -2,45 +2,33 @@ package com.example.library.app.book;
 
 import com.example.library.app.author.Author;
 import com.example.library.app.author.AuthorMapper;
+import com.example.library.app.author.AuthorRepository;
 import com.example.library.model.book.BookCreateDto;
 import com.example.library.model.book.BookResource;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = AuthorMapper.class)
+@Mapper(componentModel = "spring")
 public interface BookMapper {
 
-  @Mapping(target = "id", ignore = true)
-  //trasferiamo authorId del Dto nel campo id dell'author dell'entity
-  @Mapping(target = "author.id", source = "authorId")
-    //nel caso complesso abbiamo bisogno di un mapper più completo che vada a prendere i valori di firstName
-    //e di lastName dall'AuthorCreateDto
+  //questo è fisso, per via del create: se devo creare il bookId lo devo lasciare null
+  @Mapping(target = "bookId", ignore = true)
+  //I limiti di JDBC mi permettono da un'altra parte di semplificare il lavoro
+  //sul mapper: il target authorId riceve (come è giusto) il valore
+  //del source authorId
+  //title su title va bene
   Book toEntity(BookCreateDto dto);
 
-  //per tutte le property che non voglio mappare ho la possibilità di dichiarare una annotation
-  //sul metodo: @Mapping(target = "cavallo", ignore = true)
+  //bookId su id
+  //title su title
+  //ho un problema con author: posso risolverlo con una dipendenza qui sul repository
+  //mettendo @Mapper(componentModel = "spring", uses = AuthorRepository.class) ma Achille lo sconsiglia
+  //perché è difficile da implementare
+  //quindi andrà risolto nel BookSserviceImpl
+  @Mapping(target = "id", source = "bookId")
+  @Mapping(target = "author", ignore = true)
   BookResource toResource(Book entity);
-  //I metodi dell'interface che si chiamano map, quando devono fare corrispondenza con
-  //metodi che non si accoppiano, invocano il get, invocano il map e poi fanno set da un'altra parte
-
-  //l'implementazione standard non ci soddisfa perché restituisce sempre una stringa vuota
-  //possiamo mettere un'implementazione con Java
-  default String map(Author value){
-    //implementazione abbozzata in BookServiceImpl
-    if(value == null) {
-      return null;
-    }
-    return String.format("%s %s", value.getFirstName(), value.getLastName());
-  }
 
 
-/*  default Author map(Long authorId){
-    if(authorId == null) {
-      return null;
-    }
-    return Author.builder()
-        .id(authorId)
-        .build();
-  }*/
 
 }

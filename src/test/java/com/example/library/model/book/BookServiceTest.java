@@ -16,11 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.relational.core.conversion.DbActionExecutionException;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(classes = LibraryBoot.class)
 @ActiveProfiles("jupiter")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Sql({"/author.sql", "/book.sql"})
 class BookServiceTest {
 
   //per il metodo createBookTest
@@ -78,7 +81,7 @@ class BookServiceTest {
     //replicare le tre righe detro questo metodo o estrarre un metodo private da invocare sia in createBookTest
     //che in questo metodo
     //Creiamo un dto con l'autore senza il titolo(Mi aspetto DataIntegrityViolation)
-    assertThrows(DataIntegrityViolationException.class, this::createBookNoTitleImpl);
+    assertThrows(DbActionExecutionException.class, this::createBookNoTitleImpl);
 
   }
 
@@ -90,7 +93,7 @@ class BookServiceTest {
 
   @Test
   void createBookNoAuthorTest() {
-    assertThrows(InvalidDataAccessApiUsageException.class, this::createBookNoAuthorImpl);
+    assertThrows(DbActionExecutionException.class, this::createBookNoAuthorImpl);
   }
 
   private void createBookNoAuthorImpl() {

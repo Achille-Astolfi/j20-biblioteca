@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.library.app.LibraryBoot;
 import java.util.Optional;
-import org.hibernate.PropertyValueException;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.relational.core.conversion.DbActionExecutionException;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 //Per convenzione la class per testare la unit Pippo si chiama PippoTest
 //La class può essere public ma è consigliato che non lo sia
@@ -43,6 +44,7 @@ import org.springframework.test.context.ActiveProfiles;
 //dalla catena di componenti AuthorServiceImpl + AuthorMapperImpl
 @ActiveProfiles("jupiter")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Sql("/author.sql")
 public class AuthorServiceTest {
   //intreccio Jupiter con Spring Framework in due modi:
   //1) dichiariamo la dipendenza dal component che è la mia unit
@@ -96,11 +98,7 @@ public class AuthorServiceTest {
     //Ho bisogno di verificare che l'eccezione sollevata abbia come cause IllegalArgumentException
     //Devo invocare readAuthorByIdNullArgumentImpl non direttamente ma come method reference
     //Interpreto il method reference non come una invocazione istantanea ma come invocazione differita
-    RuntimeException exception = assertThrows(RuntimeException.class, this::readAuthorByIdNullArgumentImpl);
-    //i più pignoli possono mettere un'assert che getCause sia non null
-    assertNotNull(exception.getCause());
-    //verifica che la cause sia di tipo IllegalArgumentException
-    assertEquals(IllegalArgumentException.class, exception.getCause().getClass());
+    assertThrows(IllegalArgumentException.class, this::readAuthorByIdNullArgumentImpl);
   }
 
   //tolgo la parola "Test" perché Sonar non ama molto i medodi che contengono questa parola
@@ -133,7 +131,7 @@ public class AuthorServiceTest {
   @Test
   void createAuthorNoNameTest() {
     //mi aspetto una exception di Spring Data
-    assertThrows(DataIntegrityViolationException.class, this::createAuthorNoNameImpl);
+    assertThrows(DbActionExecutionException.class, this::createAuthorNoNameImpl);
     }
 
   private void createAuthorNoNameImpl() {
@@ -144,9 +142,7 @@ public class AuthorServiceTest {
   @Test
   void createAuthorNullArgumentTest() {
     //come sopra readAuthorByIdNullArgumentTest
-   InvalidDataAccessApiUsageException exception = assertThrows(InvalidDataAccessApiUsageException.class, this::createAuthorNullArgumentImpl);
-   assertNotNull(exception.getCause());
-   assertEquals(IllegalArgumentException.class, exception.getCause().getClass());
+  assertThrows(IllegalArgumentException.class, this::createAuthorNullArgumentImpl);
   }
 
   private void createAuthorNullArgumentImpl() {
