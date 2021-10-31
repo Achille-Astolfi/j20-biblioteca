@@ -14,10 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(classes = LibraryBoot.class)
 @ActiveProfiles("jupiter")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Sql("/author.sql")
 class AuthorServiceTest {
   // intreccio Jupiter con spring framework in due modi
   // 1. dichiarando la dipendenza del component che è la mia unit

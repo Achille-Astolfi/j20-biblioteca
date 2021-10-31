@@ -5,11 +5,10 @@ import com.example.library.app.author.AuthorRepository;
 import com.example.library.model.book.BookCreateDto;
 import com.example.library.model.book.BookResource;
 import com.example.library.model.book.BookService;
-import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,67 +18,31 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-    // unisamo un metodo per caridare dei dati finti nel db
-    // il metodo può essere rpivate , protector o public
-    // annotato come PostConstructor verrà eseguito dopo il costruttore e dopo aver risolto tutte le dipendenze
-//    @PostConstruct
-//    private void caricaDatiFinti() {
-//        Author king = Author.builder()
-//            .lastName("King")
-//            .firstName("Stephen")
-//            .build();
-//        Author rowling = Author.builder()
-//            .lastName("Rowling")
-//            .firstName("J. K.")
-//            .build();
-//        // per inserire o aggiornare un record di DB si usa il metodo save del repository
-//        // questo metodo è disponibile in tutte le implementazioni "CRUD" di Spring Data
-//        // NOTA BENE: è molto importante riassegnare la variabile quando si invoca il metodo
-//        // save; nella maggioranza dei casi è lo stesso oggetto ma POTREBBE essere diverso
-//        king = this.authorRepository.save(king);
-//        rowling = this.authorRepository.save(rowling);
-//
-//        Book it = new Book();
-//        it.setTitle("It");
-//        it.setAuthor(king);
-//        Book potter = new Book();
-//        potter.setTitle("Harry Potter e la pietra filosofale");
-//        potter.setAuthor(rowling);
-//
-//        it = this.bookRepository.save(it);
-//        potter = this.bookRepository.save(potter);
-//    }
 
     @Override
-    public Optional<BookResource> readBookById(Long bookId) {
-        // finId restituisce un optional empty se non esiste un record con chiave bookId
-        // restituisce un optionl pieno se il record esiste
-        Optional<Book> maybeBook = this.bookRepository.findById(bookId);
-        return maybeBook.map(this::toResource);
+    @Transactional(readOnly = true)
+    public Optional<BookResource> readBookById(@NonNull Long bookId) {
+        return this.bookRepository.findById(bookId).map(this::toResourceImpl);
     }
 
     @Override
     @Transactional
-    public BookResource createBook(BookCreateDto dto){
+    @NonNull
+    public BookResource createBook(BookCreateDto dto) {
         Book book = this.bookMapper.toEntity(dto);
-        Long idEsistnte = book.getAuthor().getId();
-        Author esistente = this.authorRepository.getOne(idEsistnte);
-        book.setAuthor(esistente);
         book = this.bookRepository.save(book);
-        return this.bookMapper.toResource(book);
+        return this.toResourceImpl(book) ;
     }
 
-    //un metodo come parametro Book
-    //come return type BookResurce
-    // NonNull serve solo a ricordare che non deve essere null
-    @NonNull
-    private BookResource toResource(@NonNull Book book){
-//        BookResource resource = new BookResource();
-//        resource.setId(book.getId());
-//        resource.setTitle(book.getTitle());
-//        // TODO ci vorrebbe un metodo che controlli su getAtuthor() chenon sia null
-//        resource.setAuthor(String.format("%s %s", book.getAuthor().getFirstname(), book.getAuthor().getLastname()));
-//        return  resource;
-        return this.bookMapper.toResource(book);
+    private BookResource toResourceImpl(Book book){
+        // primo passo : uso il mapper per recuperare il BookResource senza il campo author
+        BookResource bookService = this.bookMapper.toResource(book);
+        // seocndo passo usa il book per recuperare la foreign key per torvare l'author grazie a authorRepository
+        Author author = this.authorRepository.findById(book.getBookId()).get();
+        // terzo passo calcolo nome + cognome e imposto il valore di author dentro BookResource
+        String fullname = String.format("%s %s", author.getFirstName(), author.getLastName());
+        bookService.setAuthor(fullname);
+        return bookService;
     }
+
 }

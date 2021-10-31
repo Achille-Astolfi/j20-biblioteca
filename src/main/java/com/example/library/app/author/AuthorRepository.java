@@ -1,7 +1,11 @@
 package com.example.library.app.author;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface AuthorRepository extends JpaRepository<Author, Long> {
+//i repository estendono crud repository
+// in tanti esempio online si trova l'annotation @Repository che è ignorata da spring
+public interface AuthorRepository extends CrudRepository<Author, Long> {
+  // eventuali metodi funzionerebber ancora apatto di usare SQL nativo al posto di JPSL/HQL
+  // e a patto di usarenamed parameters al posto dei ?
 
 }

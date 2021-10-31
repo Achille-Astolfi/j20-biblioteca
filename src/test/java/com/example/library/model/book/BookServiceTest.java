@@ -16,10 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(classes = LibraryBoot.class)
 @ActiveProfiles("jupiter")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Sql({"/author.sql", "/book.sql"})
 class BookServiceTest {
   @Autowired
   private BookService bookService;
