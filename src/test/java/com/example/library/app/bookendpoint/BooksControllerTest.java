@@ -37,7 +37,7 @@ class BooksControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    @WithMockUser("user")
+    @WithMockUser("maria")
     void getBookSingleTest() throws Exception {
         // definisco input
         Long input = 1L;
@@ -58,7 +58,7 @@ class BooksControllerTest {
     }
 
     @Test
-    @WithMockUser("user")
+    @WithMockUser(authorities = "ROLE_LIBRARIAN")
     void postBookCreateTest() throws Exception {
         String title = "La circonferenza di una nuvola";
         // definisco input
