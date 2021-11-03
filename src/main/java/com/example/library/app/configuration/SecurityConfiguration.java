@@ -25,6 +25,8 @@ public class SecurityConfiguration {
         return common(http).requestMatchers()
                 // actuator (ma sarà da securizzare)
                 .antMatchers("/actuator/**", "/favicon.ico")
+                // eventuali endpoint senza autenticazione
+                .antMatchers("/greetings/**", "/halo")
                 // la login e la logout
                 .antMatchers("/login", "/logout").and()
                 .formLogin().failureHandler(new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
