@@ -42,7 +42,7 @@ class BooksControllerTest {
   private BookService bookService;
 
   @Test
-  @WithMockUser("user")
+  @WithMockUser("maria")
   public void getBookSingleTest() throws Exception {
     Long input = 1L;
     BookResource resource = new BookResource();
@@ -60,7 +60,7 @@ class BooksControllerTest {
   }
 
   @Test
-  @WithMockUser("user")
+  @WithMockUser(roles = "ADMIN")
   public void postBookCreateTest() throws  Exception{
     String title = "La circonferenza di una nuvola";
     BookCreateDto input = new BookCreateDto();

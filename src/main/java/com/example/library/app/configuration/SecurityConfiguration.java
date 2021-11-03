@@ -24,6 +24,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 //Le classi annotate con@Configuration possono avere dei metodi annotati con la annotation @Bean
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
+
     //Questa annotation è l'equivalente di una annotation component su una class
     //Al termine di questa catena di metodi ho complicato la conf
     //E' una catena di filtri che viene applicata in ordine. Se uno dei filtri chiude la
@@ -34,6 +35,8 @@ public class SecurityConfiguration {
         return common(http).requestMatchers()
                 // actuator (ma sarà da securizzare)
                 .antMatchers("/actuator/**", "/favicon.ico")
+                //eventuali endpoint senza autenticazione
+                .antMatchers("/greetings/**", "/halo")
                 // la login e la logout
                 .antMatchers("/login", "/logout").and()
                 .formLogin().failureHandler(new AuthenticationEntryPointFailureHandler(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
@@ -58,6 +61,20 @@ public class SecurityConfiguration {
                 // build
                 .build();
     }
+
+
+    //AuthenticationProvider mi permette di specificare il servizio che mi valida l'autenticazione
+    //ossia il match username/password nel caso in cui questo sia il server di Single Sign On
+    //oppure il token di autorizzazione che sia Oauth o Sso nel caso in cui questo sia il Rest server.
+
+    //L'autenticationProvider risponde con "401" ("AccessDeniedException") oppure restituisce
+    //un oggetto che contiene il nome dell'utente autenticato.
+
+    //UserDetailsService invece è il servizio che a fronte di un nome utente che gli è inviato al passaggio
+    //precedente in causo di auth riuscita, restituisce alcuni dati dell'utente e tutte le autorities (ossia i ruoli)
+
+    //Questi servizi sono specificati come @Bean del security configuration oppure possono essere @Component o @Service
+    //che implementano le interfacce necessarie.
 
     private HttpSecurity common(HttpSecurity http) throws Exception {
         // operazioni comuni a tutte le SecurityFilterChain

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+//Questo service potrebbe essere un buon candidato per implementare anche UserDetailsService
 public class AccountServiceImpl implements AccountService {
 
   private final AccountMapper accountMapper;
