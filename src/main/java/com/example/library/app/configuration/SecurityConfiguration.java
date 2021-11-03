@@ -16,9 +16,18 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+//I configuration bean sono dei component come tutti gli altri
+//Spring crea un oggetto di questa class invocando il costruttore di default oppure cerca di
+//risolvere le dipendenze. Una volta completato l'avvio dell'applicativo i bean di configurazione
+//vengono dimenticati e rimangono  attivi solo gli altri component
 @Configuration
+//Le classi annotate con@Configuration possono avere dei metodi annotati con la annotation @Bean
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
+    //Questa annotation è l'equivalente di una annotation component su una class
+    //Al termine di questa catena di metodi ho complicato la conf
+    //E' una catena di filtri che viene applicata in ordine. Se uno dei filtri chiude la
+    //catena, i successivi non vengono applicati: è necessario specificare l'ordine
     @Bean
     @Order(0)
     public SecurityFilterChain securityFilterChainSwagger(HttpSecurity http) throws Exception {

@@ -1,11 +1,11 @@
 package com.example.library.model.book;
 
 import com.example.library.model.author.AuthorCreateDTO;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 public class BookCreateDto {
   //situazione semplificata
   private String title;

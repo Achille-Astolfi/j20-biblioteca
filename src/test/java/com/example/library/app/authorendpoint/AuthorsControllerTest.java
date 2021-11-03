@@ -23,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.NestedServletException;
@@ -50,6 +51,7 @@ class AuthorsControllerTest {
   //è sufficiente MockMvc
 
   @Test
+  @WithMockUser("user")
   void getAuthorSingleTest() throws Exception {
     //test positivo di getAuthorSingle: chiamata GET a /authors/1
     //NB: i service non fanno parte della Unit che stiamo testando
@@ -77,7 +79,7 @@ class AuthorsControllerTest {
     //altrimenti usa quello di default: accept: application/json e content-type: application/json
     //Potrebbe essere anche */* in entrambi i casi, poco importa
     //Come farebbe Postman
-    this.mockMvc.perform(get("/authors/1"))
+    this.mockMvc.perform(get("/authors/{id}", input))
         .andExpect(status().isOk())
         //mi aspetto anche che la resource restituita abbia 1 come chiave id
         .andExpect(jsonPath("$.id").value(1))
@@ -85,6 +87,7 @@ class AuthorsControllerTest {
   }
 
   @Test
+  @WithMockUser("user")
   void getAuthorSingleNotFoundTest() throws Exception {
     //invoco /authors/0 e mi aspetto 404
     //istruisco mockito a rispondere con un Optional vuoto se chiedo id 0
@@ -95,6 +98,7 @@ class AuthorsControllerTest {
   }
 
   @Test
+  @WithMockUser("user")
   void postAuthorCreateTest() throws Exception {
     //istruisco il MockBean
     AuthorCreateDTO input = new AuthorCreateDTO();
@@ -118,6 +122,7 @@ class AuthorsControllerTest {
   }
 
   @Test
+  @WithMockUser("user")
   void postAuthorCreateNoNameTest() throws Exception {
     assertThrows(NestedServletException.class, this::postAuthorCreateNoNameImpl);
   }
