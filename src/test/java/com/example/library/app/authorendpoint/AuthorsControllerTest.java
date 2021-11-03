@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.NestedServletException;
@@ -47,6 +48,7 @@ class AuthorsControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @WithMockUser("user")
     void getAuthorSingleTest() throws Exception {
         // test positivo di getAuthorSingle: chiamata GET a /authors/1
         // NOTA BENE: i Service NON fanno parte della Unit che sto testando
@@ -81,6 +83,7 @@ class AuthorsControllerTest {
     }
 
     @Test
+    @WithMockUser("user")
     void getAuthorSingleNotFoundTest() throws Exception {
         // istruisco Mockito (il MockBean) a rispondere con un Optional vuoto se richiedo id == 0L
         Long input = 0L;
@@ -97,6 +100,7 @@ class AuthorsControllerTest {
     }
 
     @Test
+    @WithMockUser("user")
     void postAuthorCreateTest() throws Exception {
         // istruisco il MockBean
         AuthorCreateDto input = new AuthorCreateDto();
@@ -124,6 +128,7 @@ class AuthorsControllerTest {
     }
 
     @Test
+    @WithMockUser("user")
     void postAuthorCreateNoNameTest() throws Exception {
         // il test si comporta in modo diverso dall'esercizio
         assertThrows(NestedServletException.class, this::postAuthorCreateNoNameImpl);
