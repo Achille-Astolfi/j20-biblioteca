@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.NestedServletException;
@@ -47,6 +48,7 @@ class AuthorsControllerTest {
   private ObjectMapper objectMapper;
 
   @Test
+  @WithMockUser("user")
   void getAuthorSingleTest() throws Exception{
     // test positivo di getAuthorsSingle: chiamata GET a /authors/1
     // NB i service non fanno parte della Unit che sto testandi
@@ -55,7 +57,7 @@ class AuthorsControllerTest {
 
     // Prima di invocare mockMvc dobbiamo specificare a SpringBoot il Body del motodo readAuthorById
 
-    //INPUT del motodo è Long 1L
+    // INPUT del motodo è Long 1L
     Long input = 1L;
     // OUTPUT del metodo è un Optional che contiene nAuthor REsource con id == input e lastname a piacere
     AuthorResource resource = new AuthorResource();
@@ -81,7 +83,8 @@ class AuthorsControllerTest {
         .andExpect(jsonPath("$.lastName").exists());
   }
   @Test
-  void getAuthorSingleNotFoundtest() throws Exception{
+  @WithMockUser("user")
+  void getAuthorSingleNotFoundTest() throws Exception{
       // invoco /authors/0 e mi aspeto una risposta 404
       // istruisco mockito(il mockbean) a rispondere con un optional vuoto se richiedo id == 0L
       Long input = 0L;
@@ -95,6 +98,7 @@ class AuthorsControllerTest {
   }
 
   @Test
+  @WithMockUser("user")
   void postAuthorCreateTest() throws Exception{
       // istruisco il MockBean
     AuthorCreateDto input = new AuthorCreateDto();
@@ -122,6 +126,7 @@ class AuthorsControllerTest {
   }
 
   @Test
+  @WithMockUser("user")
   void postAuthorCreateNoNameTest() throws Exception{
     //input DTO senza ne nome ne cognome
     assertThrows(NestedServletException.class, this::postAuthorCreateNoNameImpl);

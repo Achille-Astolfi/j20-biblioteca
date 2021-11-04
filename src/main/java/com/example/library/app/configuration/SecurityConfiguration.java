@@ -53,6 +53,7 @@ public class SecurityConfiguration {
     private HttpSecurity common(HttpSecurity http) throws Exception {
         // operazioni comuni a tutte le SecurityFilterChain
         return http
+
                 // cors MVC
                 .cors(withDefaults())
                 // no csrf

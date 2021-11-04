@@ -4,6 +4,7 @@ import com.example.library.model.book.BookCreateDto;
 import com.example.library.model.book.BookResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
@@ -33,6 +34,10 @@ public class BooksController {
     }
 
     @PostMapping
+    // Sicurizzo l'endpoint con i ruoli che possono accedere
+    // i ruoli sonoin "or"
+
+    @Secured({"ROLE_ADMIN", "ROLE_LIBRARIAN"})
     ResponseEntity<?> postBookCreate(@RequestBody BookCreateDto dto) {
         BookResource resource = this.postBookCreateOrchestrator.postBookCreate(dto);
         Long bookId = resource.getId();
