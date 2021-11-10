@@ -1,17 +1,16 @@
-#NON FUNZIONA
 version: '3'
 services:
   mvn:
     image: "maven:latest"
     volumes:
-      - '/C:/Users/Achille/.m2/repository:/root/.m2/repository'
-      - '/C:/Users/Achille/IdeaProjects/j20-biblioteca:/var/app'
+      - 'C:\Users\Achille/.m2/repository:/root/.m2/repository'
+      - 'C:\Users\Achille/IdeaProjects/j20-biblioteca:/var/app'
     entrypoint: ["mvn"]
-    command: ["--file", "/var/app/pom.xml", "clean", "package"]
+    command: ["--file", "/var/app", "clean", "package"]
   springboot:
     image: "openjdk:11"
     volumes:
-      - '/C:/Users/Achille/IdeaProjects/j20-biblioteca:/var/app'
+      - 'C:\Users\Achille/IdeaProjects/j20-biblioteca:/var/app'
     tty: true
     entrypoint: 'java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000'
     command: ['-jar', '/var/app/target/j20-biblioteca-1.0-SNAPSHOT.jar']
