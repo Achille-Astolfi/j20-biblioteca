@@ -1,9 +1,8 @@
 package com.example.library.app.book;
 
-import com.example.library.app.author.Author;
-import com.example.library.app.author.AuthorRepository;
 import com.example.library.model.book.BookCreateDto;
 import com.example.library.model.book.BookResource;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

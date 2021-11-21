@@ -1,21 +1,20 @@
 package com.example.library.app.account;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.example.library.app.role.Role;
 import com.example.library.app.role.RoleMapper;
 import com.example.library.app.role.RoleRepository;
 import com.example.library.model.account.AccountResource;
 import com.example.library.model.account.AccountService;
-import com.example.library.model.role.RoleResource;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpStatusCodeException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

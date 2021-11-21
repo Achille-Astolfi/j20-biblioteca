@@ -1,12 +1,13 @@
 package com.example.library.app.authorendpoint;
 
+import java.util.Optional;
+
 import com.example.library.model.author.AuthorResource;
 import com.example.library.model.author.AuthorService;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor

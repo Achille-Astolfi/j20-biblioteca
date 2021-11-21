@@ -1,12 +1,21 @@
 package com.example.library.app.bookendpoint;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Optional;
+
 import com.example.library.app.LibraryBoot;
-import com.example.library.app.book.Book;
-import com.example.library.model.author.AuthorService;
 import com.example.library.model.book.BookCreateDto;
 import com.example.library.model.book.BookResource;
 import com.example.library.model.book.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.hamcrest.core.StringEndsWith;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +26,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = LibraryBoot.class)
 @ActiveProfiles("jupiter")

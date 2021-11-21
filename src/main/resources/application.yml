@@ -4,7 +4,7 @@ spring:
     active: development
   # Database
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: "jdbc:mysql://j19-biblioteca.cb7rekoppnry.eu-west-1.rds.amazonaws.com:3306/biblio"
     username: biblio
     password: papapollo
@@ -13,8 +13,8 @@ logging:
   pattern:
     console: "%d %-5level %logger : %msg%n"
   level:
-    org.springframework: info
-    org.hibernate: info
+    '[org.springframework]': info
+    '[org.hibernate]': info
 # Server configuration
 server:
-  port: 8080 #set your port
+  port: 5000
