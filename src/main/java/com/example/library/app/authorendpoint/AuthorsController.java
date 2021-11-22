@@ -4,6 +4,7 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 
 import java.net.URI;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import com.example.library.model.ResourceList;
@@ -12,6 +13,7 @@ import com.example.library.model.author.AuthorResource;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,11 +60,21 @@ public class AuthorsController {
         // Ho un'API di Spring che mi permette di costruire la URI completa di una GET
         // partendo dall'invocazione "finta" del metodo
         URI uri = fromMethodCall(on(this.getClass()).getAuthorSingle(authorId)).build().toUri();
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(resource);
     }
 
     @GetMapping
     public ResponseEntity<ResourceList<AuthorResource>> getAll() {
         return ResponseEntity.ok(new ResourceList<>(this.getAuthorSingleOrchestrator.getAll()));
+    }
+
+    @PatchMapping("/{authorId}")
+    public ResponseEntity<AuthorResource> patchAuthorSingle(@PathVariable Long authorId, @RequestBody AuthorCreateDto dto) {
+        try {
+            var value = this.postAuthorCreateOrchestrator.patchAuthorUpdate(authorId, dto);
+            return ResponseEntity.ok(value);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

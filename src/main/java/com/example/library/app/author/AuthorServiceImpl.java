@@ -46,6 +46,16 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Transactional
+    public AuthorResource updateAuthor(Long authorId, @NonNull AuthorCreateDto dto) {
+        var entity = this.authorRepository.findById(authorId).orElseThrow();
+        entity = this.authorMapper.updateEntity(dto, entity);
+        // ricordarsi SEMPRE di riassegnare la variabile dopo save
+        entity = this.authorRepository.save(entity);
+        return this.authorMapper.toResource(entity);
+    }
+
+    @Override
     public List<AuthorResource> readAuthorsAll() {
         var entities = this.authorRepository.findAll();
         return this.authorMapper.toResourceList(entities);

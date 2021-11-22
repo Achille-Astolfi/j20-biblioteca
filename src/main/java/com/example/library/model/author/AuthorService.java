@@ -16,6 +16,7 @@ public interface AuthorService {
     // Vuoi la risposta Accepted? Restituisco void
     // Vuoi la risposta Created? Restituisco Long (l'id assegnato alla resource)
     AuthorResource createAuthor(AuthorCreateDto dto);
+    AuthorResource updateAuthor(Long authorId, AuthorCreateDto dto);
 
     List<AuthorResource> readAuthorsAll();
 }

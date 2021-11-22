@@ -7,6 +7,7 @@ import com.example.library.model.author.AuthorResource;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
@@ -25,4 +26,7 @@ public interface AuthorMapper {
 
     @Mapping(target = "authorId", ignore = true)
     Author toEntity(AuthorCreateDto dto);
+
+    @Mapping(target = "authorId", ignore = true)
+    Author updateEntity(AuthorCreateDto dto, @MappingTarget Author existing);
 }

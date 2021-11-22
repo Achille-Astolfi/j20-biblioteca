@@ -23,4 +23,10 @@ public class PostAuthorCreateOrchestrator {
         // anche in questo caso l'orchestratore è banale
         return this.authorService.createAuthor(authorCreateDto);
     }
+
+    @NonNull
+    public AuthorResource patchAuthorUpdate(Long authorId, @NonNull AuthorCreateDto authorCreateDto) {
+        // anche in questo caso l'orchestratore è banale
+        return this.authorService.updateAuthor(authorId, authorCreateDto);
+    }
 }
