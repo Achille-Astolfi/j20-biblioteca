@@ -23,6 +23,5 @@ public interface BookMapper {
     // quindi andrà risolto nel BookServiceImpl
     @Mapping(target = "id", source = "bookId")
     @Mapping(target = "author", ignore = true)
-    @Mapping(target = "cavallo", ignore = true)
     BookResource toResource(Book entity);
 }
