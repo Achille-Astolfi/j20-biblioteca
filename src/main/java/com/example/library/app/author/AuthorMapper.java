@@ -1,7 +1,10 @@
 package com.example.library.app.author;
 
+import java.util.List;
+
 import com.example.library.model.author.AuthorCreateDto;
 import com.example.library.model.author.AuthorResource;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -17,6 +20,8 @@ public interface AuthorMapper {
     // @Mapping; molto probabilmente mi conviene riscriverle daccapo
     @Mapping(target = "id", source = "authorId")
     AuthorResource toResource(Author entity);
+
+    List<AuthorResource> toResourceList(Iterable<Author> entities);
 
     @Mapping(target = "authorId", ignore = true)
     Author toEntity(AuthorCreateDto dto);

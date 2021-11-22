@@ -1,8 +1,9 @@
 package com.example.library.model.author;
 
-import org.springframework.lang.NonNull;
-
+import java.util.List;
 import java.util.Optional;
+
+import org.springframework.lang.NonNull;
 
 public interface AuthorService {
     Optional<AuthorResource> readAuthorById(@NonNull Long authorId);
@@ -15,4 +16,6 @@ public interface AuthorService {
     // Vuoi la risposta Accepted? Restituisco void
     // Vuoi la risposta Created? Restituisco Long (l'id assegnato alla resource)
     AuthorResource createAuthor(AuthorCreateDto dto);
+
+    List<AuthorResource> readAuthorsAll();
 }

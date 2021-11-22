@@ -1,5 +1,6 @@
 package com.example.library.app.authorendpoint;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.example.library.model.author.AuthorResource;
@@ -23,5 +24,9 @@ public class GetAuthorSingleOrchestrator {
 //            return Optional.empty();
 //        }
 //        return this.authorService.readAuthorById(authorId);
+    }
+
+    public List<AuthorResource> getAll() {
+        return this.authorService.readAuthorsAll();
     }
 }

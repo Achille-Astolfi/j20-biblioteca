@@ -1,15 +1,18 @@
 package com.example.library.app.author;
 
 
+import java.util.List;
+import java.util.Optional;
+
 import com.example.library.model.author.AuthorCreateDto;
 import com.example.library.model.author.AuthorResource;
 import com.example.library.model.author.AuthorService;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +43,11 @@ public class AuthorServiceImpl implements AuthorService {
         // ricordarsi SEMPRE di riassegnare la variabile dopo save
         author = this.authorRepository.save(author);
         return this.authorMapper.toResource(author);
+    }
+
+    @Override
+    public List<AuthorResource> readAuthorsAll() {
+        var entities = this.authorRepository.findAll();
+        return this.authorMapper.toResourceList(entities);
     }
 }

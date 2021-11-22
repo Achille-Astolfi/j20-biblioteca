@@ -6,6 +6,7 @@ import static org.springframework.web.servlet.mvc.method.annotation.MvcUriCompon
 import java.net.URI;
 import java.util.Optional;
 
+import com.example.library.model.ResourceList;
 import com.example.library.model.author.AuthorCreateDto;
 import com.example.library.model.author.AuthorResource;
 
@@ -58,5 +59,10 @@ public class AuthorsController {
         // partendo dall'invocazione "finta" del metodo
         URI uri = fromMethodCall(on(this.getClass()).getAuthorSingle(authorId)).build().toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<ResourceList<AuthorResource>> getAll() {
+        return ResponseEntity.ok(new ResourceList<>(this.getAuthorSingleOrchestrator.getAll()));
     }
 }
